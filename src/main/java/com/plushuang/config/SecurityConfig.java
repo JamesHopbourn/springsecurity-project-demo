@@ -20,7 +20,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/level3/**").hasRole("vip3");
 
 
-        httpSecurity.formLogin();
+        httpSecurity.formLogin().loginPage("/toLoginForm").loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password");
+        httpSecurity.csrf().disable();
+        httpSecurity.logout().logoutSuccessUrl("/");
+        //定制记住我的参数！
+        httpSecurity.rememberMe().rememberMeParameter("remember");
+        // .logoutSuccessUrl("/"); 注销成功来到首页
+
     }
 
     @Override
@@ -35,6 +41,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("root").password(new BCryptPasswordEncoder().encode("123456")).roles("vip1","vip2","vip3")
                 .and()
                 .withUser("guest").password(new BCryptPasswordEncoder().encode("123456")).roles("vip1");
-
     }
 }
